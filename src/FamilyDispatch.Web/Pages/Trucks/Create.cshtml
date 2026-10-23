@@ -1,0 +1,24 @@
+@page
+@model FamilyDispatch.Web.Pages.Trucks.CreateModel
+@{
+    ViewData["Title"] = "Add truck";
+}
+
+<h1 class="h3">Add truck</h1>
+
+<form method="post" class="col-lg-6">
+    <div class="mb-3">
+        <label asp-for="UnitNumber" class="form-label"></label>
+        <input asp-for="UnitNumber" class="form-control" placeholder="A-103" />
+        <span asp-validation-for="UnitNumber" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Plate" class="form-label"></label>
+        <input asp-for="Plate" class="form-control" placeholder="TX 7KD-219" />
+        <span asp-validation-for="Plate" class="text-danger"></span>
+    </div>
+    <div class="d-flex flex-wrap gap-2">
+        <button type="submit" class="btn btn-primary">Add truck</button>
+        <a asp-page="/Trucks/Index" class="btn btn-link">Cancel</a>
+    </div>
+</form>

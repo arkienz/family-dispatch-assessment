@@ -1,0 +1,70 @@
+@page
+@model DashboardModel
+@using FamilyDispatch.Web.Domain
+@{
+    ViewData["Title"] = "Dashboard";
+    var tiles = new (string Label, int Count, string Page)[]
+    {
+        (Ui.StatusLabel(LoadStatus.Assigned), Model.CountOf(LoadStatus.Assigned), "/Loads/Index"),
+        (Ui.StatusLabel(LoadStatus.PickedUp), Model.CountOf(LoadStatus.PickedUp), "/Loads/Index"),
+        (Ui.StatusLabel(LoadStatus.Delivered), Model.CountOf(LoadStatus.Delivered), "/Loads/Index"),
+        ("Drivers", Model.Drivers.Count, "/Drivers/Index"),
+        ("Trucks", Model.Trucks.Count, "/Trucks/Index"),
+    };
+}
+
+<h1 class="h3">Dashboard</h1>
+
+<div class="row g-2 mb-4">
+    @foreach (var t in tiles)
+    {
+        <div class="col-6 col-md">
+            <a class="card text-decoration-none h-100" asp-page="@t.Page">
+                <div class="card-body">
+                    <div class="fs-3">@t.Count</div>
+                    <div class="text-body-secondary">@t.Label</div>
+                </div>
+            </a>
+        </div>
+    }
+</div>
+
+<div class="d-flex flex-wrap gap-2 align-items-center justify-content-between mb-2">
+    <h2 class="h5 mb-0">Loads</h2>
+    <a asp-page="/Loads/Create" class="btn btn-primary">New load</a>
+</div>
+@if (Model.Loads.Count == 0)
+{
+    <p>No loads yet.</p>
+}
+else
+{
+    <partial name="_LoadsTable" model="new LoadsTableModel(Model.Loads, ShowDriver: true)" />
+}
+
+<div class="row g-4">
+    <div class="col-md-6">
+        <h2 class="h5">Drivers</h2>
+        <table class="table table-striped table-sm">
+            <thead><tr><th scope="col">Name</th><th scope="col">Active loads</th></tr></thead>
+            <tbody>
+                @foreach (var d in Model.Drivers)
+                {
+                    <tr><td>@d.Name</td><td>@d.ActiveLoads</td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-6">
+        <h2 class="h5">Trucks</h2>
+        <table class="table table-striped table-sm">
+            <thead><tr><th scope="col">Unit</th><th scope="col">Plate</th></tr></thead>
+            <tbody>
+                @foreach (var t in Model.Trucks)
+                {
+                    <tr><td>@t.UnitNumber</td><td>@t.Plate</td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,28 @@
+@page
+@model FamilyDispatch.Web.Pages.Drivers.IndexModel
+@using System.Security.Claims
+@using FamilyDispatch.Web.Security
+@{
+    ViewData["Title"] = "Drivers";
+}
+
+<h1 class="h3">Drivers</h1>
+
+@if (Model.Drivers.Count == 0)
+{
+    <p>No drivers in @User.FindFirstValue(AppClaims.CompanyName) yet.</p>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead><tr><th scope="col">Name</th><th scope="col">Email</th><th scope="col">Active loads</th></tr></thead>
+            <tbody>
+                @foreach (var d in Model.Drivers)
+                {
+                    <tr><td>@d.Name</td><td>@d.Email</td><td>@d.ActiveLoads</td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

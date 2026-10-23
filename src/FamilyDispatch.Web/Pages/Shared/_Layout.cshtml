@@ -1,0 +1,79 @@
+﻿@using System.Security.Claims
+@using FamilyDispatch.Web.Domain
+@using FamilyDispatch.Web.Security
+@{
+    var signedIn = User.Identity?.IsAuthenticated == true;
+    var isDriver = User.IsInRole(nameof(Role.Driver));
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] · Family Dispatch</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom">
+            <div class="container">
+                <a class="navbar-brand" asp-page="/Index">Family Dispatch (demo)</a>
+                @if (signedIn)
+                {
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="main-nav"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div id="main-nav" class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                        @* Links are hidden per role for usability only; every page enforces its own policy on the server. *@
+                        <ul class="navbar-nav flex-grow-1">
+                            @if (isDriver)
+                            {
+                                <li class="nav-item"><a class="nav-link text-dark" asp-page="/Loads/Index">My loads</a></li>
+                            }
+                            else
+                            {
+                                <li class="nav-item"><a class="nav-link text-dark" asp-page="/Dashboard">Dashboard</a></li>
+                                <li class="nav-item"><a class="nav-link text-dark" asp-page="/Loads/Index">Loads</a></li>
+                                <li class="nav-item"><a class="nav-link text-dark" asp-page="/Drivers/Index">Drivers</a></li>
+                                <li class="nav-item"><a class="nav-link text-dark" asp-page="/Trucks/Index">Trucks</a></li>
+                            }
+                        </ul>
+                        <form method="post" asp-page="/Account/Logout" class="py-2 py-sm-0">
+                            <button type="submit" class="btn btn-outline-secondary btn-sm">Sign out</button>
+                        </form>
+                    </div>
+                }
+            </div>
+        </nav>
+        @if (signedIn)
+        {
+            <div class="context-bar bg-body-tertiary border-bottom py-2">
+                <div class="container">
+                    Signed in as <strong>@User.FindFirstValue(ClaimTypes.Name)</strong>
+                    · @User.FindFirstValue(ClaimTypes.Role)
+                    · <strong>@User.FindFirstValue(AppClaims.CompanyName)</strong>
+                </div>
+            </div>
+        }
+    </header>
+    <div class="container mt-3">
+        <main role="main" class="pb-3">
+            @if (TempData["Ok"] is string ok)
+            {
+                <div class="alert alert-success" role="status">@ok</div>
+            }
+            @if (TempData["Error"] is string error)
+            {
+                <div class="alert alert-danger" role="alert">@error</div>
+            }
+            @RenderBody()
+        </main>
+    </div>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/app.js" asp-append-version="true"></script>
+
+</body>
+</html>

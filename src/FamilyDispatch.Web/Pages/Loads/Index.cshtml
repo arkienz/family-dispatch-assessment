@@ -1,0 +1,22 @@
+@page
+@model FamilyDispatch.Web.Pages.Loads.IndexModel
+@{
+    ViewData["Title"] = Model.IsDriver ? "My loads" : "Loads";
+}
+
+<div class="d-flex flex-wrap gap-2 align-items-center justify-content-between mb-2">
+    <h1 class="h3 mb-0">@ViewData["Title"]</h1>
+    @if (!Model.IsDriver)
+    {
+        <a asp-page="/Loads/Create" class="btn btn-primary">New load</a>
+    }
+</div>
+
+@if (Model.Rows.Count == 0)
+{
+    <p>@(Model.IsDriver ? "No loads assigned to you right now." : "No loads yet.")</p>
+}
+else
+{
+    <partial name="_LoadsTable" model="new LoadsTableModel(Model.Rows, ShowDriver: !Model.IsDriver)" />
+}

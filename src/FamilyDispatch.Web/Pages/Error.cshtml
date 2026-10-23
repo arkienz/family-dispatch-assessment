@@ -1,0 +1,10 @@
+@page "/Error/{code:int?}"
+@model ErrorModel
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<h1 class="h3">@Model.Title</h1>
+<p class="text-body-secondary">Error @Model.Code</p>
+<p>@Model.Text</p>
+<a asp-page="/Loads/Index">Back to loads</a>

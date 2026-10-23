@@ -1,0 +1,37 @@
+@page
+@model FamilyDispatch.Web.Pages.Trucks.IndexModel
+@using FamilyDispatch.Web.Domain
+@{
+    ViewData["Title"] = "Trucks";
+}
+
+<div class="d-flex flex-wrap gap-2 align-items-center justify-content-between mb-2">
+    <h1 class="h3 mb-0">Trucks</h1>
+    @if (User.IsInRole(nameof(Role.Owner)))
+    {
+        <a asp-page="/Trucks/Create" class="btn btn-primary">Add truck</a>
+    }
+</div>
+@if (!User.IsInRole(nameof(Role.Owner)))
+{
+    <p class="text-body-secondary">Only the Owner can add trucks.</p>
+}
+
+@if (Model.Trucks.Count == 0)
+{
+    <p>No trucks yet.</p>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead><tr><th scope="col">Unit</th><th scope="col">Plate</th></tr></thead>
+            <tbody>
+                @foreach (var t in Model.Trucks)
+                {
+                    <tr><td>@t.UnitNumber</td><td>@t.Plate</td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

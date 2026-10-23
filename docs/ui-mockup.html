@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mockup: Loads + Load details · Family Dispatch</title>
+<!-- Mockup only: CDN Bootstrap. The app uses the template's wwwroot/lib copy. -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+<style>
+.btn { white-space: nowrap; }
+.table td, .table th { font-variant-numeric: tabular-nums; }
+.context-bar { font-size: .9rem; }
+.stepper { list-style: none; padding: 0; display: flex; gap: .5rem; flex-wrap: wrap; }
+.stepper li { padding: .25rem .6rem; border: 1px solid var(--bs-border-color); border-radius: .375rem; }
+.stepper li.done { background: var(--bs-success-bg-subtle); color: var(--bs-success-text-emphasis); }
+.stepper li[aria-current="step"] { border-color: var(--bs-primary); font-weight: 600; }
+.mock-label { font: 600 .75rem system-ui; text-transform: uppercase; letter-spacing: .05em; color: #6c757d; margin: 2rem 0 .5rem; }
+</style>
+</head>
+<body>
+<nav class="navbar navbar-expand-sm bg-white border-bottom">
+  <div class="container">
+    <a class="navbar-brand" href="#">Family Dispatch (demo)</a>
+    <ul class="navbar-nav me-auto flex-row gap-3">
+      <li class="nav-item"><a class="nav-link" href="#">Dashboard</a></li>
+      <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">Loads</a></li>
+      <li class="nav-item d-none d-sm-block"><a class="nav-link" href="#">Drivers</a></li>
+      <li class="nav-item d-none d-sm-block"><a class="nav-link" href="#">Trucks</a></li>
+    </ul>
+    <form><button type="button" class="btn btn-outline-secondary btn-sm">Sign out</button></form>
+  </div>
+</nav>
+<div class="context-bar bg-body-tertiary border-bottom py-2">
+  <div class="container">Signed in as <strong>Olivia Grant</strong> · Owner · <strong>Alpha Transport</strong></div>
+</div>
+
+<main class="container pb-5">
+  <p class="mock-label">Screen 1: /Loads (office view)</p>
+  <div class="d-flex flex-wrap gap-2 align-items-center justify-content-between mb-3">
+    <h1 class="h3 m-0">Loads</h1>
+    <a class="btn btn-primary" href="#">New load</a>
+  </div>
+  <div class="table-responsive">
+    <table class="table table-striped table-hover align-middle">
+      <thead><tr>
+        <th scope="col">Load</th><th scope="col">Route</th>
+        <th scope="col" class="d-none d-md-table-cell">Pickup</th>
+        <th scope="col" class="d-none d-md-table-cell">Driver</th>
+        <th scope="col" class="d-none d-md-table-cell">Truck</th>
+        <th scope="col">Status</th>
+        <th scope="col" class="d-none d-md-table-cell">Docs</th>
+      </tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+
+  <p class="mock-label">Screen 2: /Loads/1 (click the status button to see each step)</p>
+  <div class="d-flex flex-wrap gap-2 align-items-start justify-content-between mb-3">
+    <div>
+      <h1 class="h3 m-0">ALP-1001 <span id="badge"></span></h1>
+      <div class="text-body-secondary small">Load #1</div>
+    </div>
+    <div class="d-flex flex-wrap gap-2">
+      <a id="assign" class="btn btn-outline-secondary" href="#">Change driver/truck</a>
+      <a class="btn btn-link" href="#">Back to loads</a>
+    </div>
+  </div>
+
+  <div class="row g-3">
+    <div class="col-lg-5">
+      <div class="card h-100"><div class="card-body">
+        <h2 class="h5">Details</h2>
+        <dl class="row mb-0">
+          <dt class="col-sm-4">Route</dt><dd class="col-sm-8">Dallas, TX → Oklahoma City, OK</dd>
+          <dt class="col-sm-4">Pickup</dt><dd class="col-sm-8">2026-10-24 14:00 UTC</dd>
+          <dt class="col-sm-4">Driver</dt><dd class="col-sm-8">Dan Rivera</dd>
+          <dt class="col-sm-4">Truck</dt><dd class="col-sm-8">A-101 (TX 4KD-118)</dd>
+          <dt class="col-sm-4">Created</dt><dd class="col-sm-8">2026-10-23 09:00 UTC</dd>
+          <dt class="col-sm-4">Picked up</dt><dd class="col-sm-8" id="pu">Not yet</dd>
+          <dt class="col-sm-4">Delivered</dt><dd class="col-sm-8" id="dl">Not yet</dd>
+        </dl>
+      </div></div>
+    </div>
+    <div class="col-lg-7 d-flex flex-column gap-3">
+      <div class="card"><div class="card-body">
+        <h2 class="h5">Status</h2>
+        <ol class="stepper mb-3" aria-label="Load status" id="stepper"></ol>
+        <div id="action"></div>
+      </div></div>
+
+      <div class="card"><div class="card-body">
+        <h2 class="h5">Documents</h2>
+        <form class="mb-3" onsubmit="return false">
+          <label for="doc" class="form-label">Delivery document</label>
+          <div class="d-flex flex-wrap gap-2">
+            <input id="doc" type="file" accept=".pdf,.jpg,.jpeg,.png" class="form-control flex-grow-1 w-auto" aria-describedby="docHelp">
+            <button class="btn btn-outline-primary">Upload</button>
+          </div>
+          <div id="docHelp" class="form-text">PDF, JPG or PNG, up to 5 MB. Signed delivery receipt (POD) or a photo of it.</div>
+        </form>
+        <p class="text-body-secondary mb-0">No documents yet. Upload the signed delivery receipt here.</p>
+      </div></div>
+    </div>
+  </div>
+
+  <p class="mock-label">Screen 3: /Loads/4 as an Alpha user (Beta load)</p>
+  <h1 class="h3">Not found in your company</h1>
+  <p>This load or page doesn't exist in Alpha Transport. Records from other companies are hidden, so this page looks the same whether the record exists elsewhere or not.</p>
+  <a class="btn btn-outline-secondary" href="#">Back to loads</a>
+</main>
+
+<script>
+const S = [
+  { key: 'Assigned',  cls: 'bg-warning-subtle text-warning-emphasis border border-warning-subtle' },
+  { key: 'Picked Up', cls: 'bg-primary-subtle text-primary-emphasis border border-primary-subtle' },
+  { key: 'Delivered', cls: 'bg-success-subtle text-success-emphasis border border-success-subtle' }
+];
+const badge = i => `<span class="badge ${S[i].cls}">${S[i].key}</span>`;
+const loads = [
+  [1, 'ALP-1001', 'Dallas, TX → Oklahoma City, OK', '2026-10-24 14:00 UTC', 'Dan Rivera', 'A-101', 0, 0],
+  [2, 'ALP-1002', 'Fort Worth, TX → Shreveport, LA', '2026-10-23 08:30 UTC', 'Dan Rivera', 'A-101', 1, 1],
+  [3, 'ALP-1003', 'Austin, TX → Houston, TX', '2026-10-25 06:00 UTC', 'Sam Cole', 'A-102', 0, 0]
+];
+document.getElementById('rows').innerHTML = loads.map(l => `<tr>
+  <td class="text-nowrap"><a class="d-inline-block py-2" href="#">${l[1]}</a><div class="small text-body-secondary">#${l[0]}</div></td>
+  <td>${l[2]}</td><td class="d-none d-md-table-cell">${l[3]}</td>
+  <td class="d-none d-md-table-cell">${l[4]}</td><td class="d-none d-md-table-cell">${l[5]}</td>
+  <td>${badge(l[6])}</td><td class="d-none d-md-table-cell">${l[7]}</td></tr>`).join('');
+
+let cur = 0;
+function render() {
+  document.getElementById('badge').innerHTML = badge(cur);
+  document.getElementById('assign').hidden = cur !== 0; // only while Assigned
+  document.getElementById('stepper').innerHTML = S.map((s, i) =>
+    i < cur ? `<li class="done">${s.key}<span class="visually-hidden"> (done)</span></li>`
+    : i === cur ? `<li aria-current="step">${s.key}</li>` : `<li>${s.key}</li>`).join('<li class="border-0 px-0" aria-hidden="true">→</li>');
+  const a = document.getElementById('action');
+  if (cur === 2) { a.innerHTML = '<p class="mb-0">Delivered 2026-10-24 16:05 UTC. No further steps.</p>'; return; }
+  a.innerHTML = `<div class="row"><div class="col-12 col-sm-auto">
+    <button class="btn btn-primary btn-lg w-100" onclick="next()">Mark as ${S[cur + 1].key}</button></div></div>` +
+    (cur === 1 ? '<div class="form-text">Delivered is final. It can\'t be moved back.</div>' : '');
+}
+function next() {
+  cur++;
+  if (cur === 1) document.getElementById('pu').textContent = '2026-10-24 14:12 UTC';
+  if (cur === 2) document.getElementById('dl').textContent = '2026-10-24 16:05 UTC';
+  render();
+}
+render();
+</script>
+</body>
+</html>

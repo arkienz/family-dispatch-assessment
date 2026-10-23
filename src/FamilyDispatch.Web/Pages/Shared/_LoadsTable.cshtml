@@ -1,0 +1,40 @@
+@model LoadsTableModel
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover align-middle">
+        <thead>
+            <tr>
+                <th scope="col">Load</th>
+                <th scope="col">Route</th>
+                <th scope="col" class="d-none d-md-table-cell">Pickup</th>
+                @if (Model.ShowDriver)
+                {
+                    <th scope="col">Driver</th>
+                }
+                <th scope="col" class="d-none d-md-table-cell">Truck</th>
+                <th scope="col">Status</th>
+                <th scope="col" class="d-none d-md-table-cell">Docs</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var l in Model.Rows)
+            {
+                <tr>
+                    <td class="text-nowrap">
+                        <a class="d-inline-block py-2" asp-page="/Loads/Details" asp-route-id="@l.Id">@l.ReferenceNo</a>
+                        <div class="small text-body-secondary">#@l.Id</div>
+                    </td>
+                    <td>@l.Origin &rarr; @l.Destination</td>
+                    <td class="d-none d-md-table-cell text-nowrap">@Ui.Utc(l.PickupDateUtc)</td>
+                    @if (Model.ShowDriver)
+                    {
+                        <td>@l.DriverName</td>
+                    }
+                    <td class="d-none d-md-table-cell">@(l.TruckUnit ?? "None")</td>
+                    <td><span class="@Ui.StatusBadgeClass(l.Status)">@Ui.StatusLabel(l.Status)</span></td>
+                    <td class="d-none d-md-table-cell">@l.DocumentCount</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

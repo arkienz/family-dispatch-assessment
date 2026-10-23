@@ -1,0 +1,42 @@
+@page "/Loads/{id:int}/Assign"
+@model FamilyDispatch.Web.Pages.Loads.AssignModel
+@using FamilyDispatch.Web.Domain
+@{
+    var l = Model.Load;
+    ViewData["Title"] = $"Change driver/truck · {l.ReferenceNo}";
+}
+
+<h1 class="h3">Change driver/truck</h1>
+<p><strong>@l.ReferenceNo</strong> · @l.Origin &rarr; @l.Destination</p>
+
+@if (!LoadWorkflow.CanReassign(l.Status))
+{
+    <div class="alert alert-warning">@l.ReferenceNo is @Ui.StatusLabel(l.Status). Driver and truck can only change while Assigned.</div>
+    <a asp-page="/Loads/Details" asp-route-id="@l.Id">Back to load</a>
+}
+else
+{
+    <form method="post" class="col-lg-8">
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label asp-for="DriverId" class="form-label"></label>
+                <select asp-for="DriverId" asp-items="Model.Drivers" class="form-select" aria-describedby="choices-help">
+                    <option value="">Choose a driver</option>
+                </select>
+                <span asp-validation-for="DriverId" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label asp-for="TruckId" class="form-label"></label>
+                <select asp-for="TruckId" asp-items="Model.Trucks" class="form-select" aria-describedby="choices-help">
+                    <option value="">No truck yet</option>
+                </select>
+                <span asp-validation-for="TruckId" class="text-danger"></span>
+            </div>
+            <div id="choices-help" class="form-text mt-n2 mb-3">Only your company's drivers and trucks are listed. The server checks again on save.</div>
+        </div>
+        <div class="d-flex flex-wrap gap-2">
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a asp-page="/Loads/Details" asp-route-id="@l.Id" class="btn btn-link">Cancel</a>
+        </div>
+    </form>
+}

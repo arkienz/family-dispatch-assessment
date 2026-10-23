@@ -1,0 +1,61 @@
+@page
+@model FamilyDispatch.Web.Pages.Loads.CreateModel
+@{
+    ViewData["Title"] = "New load";
+}
+
+<h1 class="h3">New load</h1>
+
+@if (Model.Drivers.Count == 0)
+{
+    <p>Add a driver before creating loads. (No user management in this prototype; see README Known issues.)</p>
+}
+else
+{
+    <form method="post" class="col-lg-8">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="mb-3">
+            <label asp-for="Input.ReferenceNo" class="form-label"></label>
+            <input asp-for="Input.ReferenceNo" class="form-control" placeholder="ALP-1004" />
+            <span asp-validation-for="Input.ReferenceNo" class="text-danger"></span>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label asp-for="Input.Origin" class="form-label"></label>
+                <input asp-for="Input.Origin" class="form-control" placeholder="Dallas, TX" />
+                <span asp-validation-for="Input.Origin" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label asp-for="Input.Destination" class="form-label"></label>
+                <input asp-for="Input.Destination" class="form-control" placeholder="Oklahoma City, OK" />
+                <span asp-validation-for="Input.Destination" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Input.PickupDateUtc" class="form-label"></label>
+            <input asp-for="Input.PickupDateUtc" type="datetime-local" class="form-control" />
+            <span asp-validation-for="Input.PickupDateUtc" class="text-danger"></span>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label asp-for="Input.DriverId" class="form-label"></label>
+                <select asp-for="Input.DriverId" asp-items="Model.Drivers" class="form-select" aria-describedby="choices-help">
+                    <option value="">Choose a driver</option>
+                </select>
+                <span asp-validation-for="Input.DriverId" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label asp-for="Input.TruckId" class="form-label"></label>
+                <select asp-for="Input.TruckId" asp-items="Model.Trucks" class="form-select" aria-describedby="choices-help">
+                    <option value="">No truck yet</option>
+                </select>
+                <span asp-validation-for="Input.TruckId" class="text-danger"></span>
+            </div>
+            <div id="choices-help" class="form-text mt-n2 mb-3">Only your company's drivers and trucks are listed. The server checks again on save.</div>
+        </div>
+        <div class="d-flex flex-wrap gap-2">
+            <button type="submit" class="btn btn-primary">Create load</button>
+            <a asp-page="/Loads/Index" class="btn btn-link">Cancel</a>
+        </div>
+    </form>
+}

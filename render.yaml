@@ -1,0 +1,11 @@
+# Render Blueprint: free Docker web service. Render ends TLS and forwards to the container on 8080.
+services:
+  - type: web
+    name: family-dispatch-demo
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /Account/Login
+    envVars:
+      - key: PORT
+        value: "8080"

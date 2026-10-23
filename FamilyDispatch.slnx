@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/FamilyDispatch.Web/FamilyDispatch.Web.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/FamilyDispatch.Tests/FamilyDispatch.Tests.csproj" />
+  </Folder>
+</Solution>
